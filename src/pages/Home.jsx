@@ -38,28 +38,24 @@ function Home() {
     <div className="max-w-6xl mx-auto px-4 py-6 flex gap-6">
       <div className="flex-1">
         <div className="flex gap-2 mb-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => dispatch(setCategory(tab.value))}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-                category === tab.value
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+  {tabs.map((tab) => (
+    <button
+      key={tab.value}
+      onClick={() => dispatch(setCategory(tab.value))}
+      className={`pill ${category === tab.value ? "pill-active" : "pill-inactive"}`}
+    >
+      {tab.label}
+    </button>
+  ))}
+</div>
 
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          {status === "loading" ? (
-            <p className="text-center text-gray-500 py-8">Loading coins...</p>
-          ) : (
-            <CoinTable coins={coins} />
-          )}
-        </div>
+        <div className="card card-hover p-4">
+  {status === "loading" ? (
+    <p className="text-center text-gray-500 py-8">Loading coins...</p>
+  ) : (
+    <CoinTable coins={coins} />
+  )}
+</div>
 
         {category === "all" && totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-4">
@@ -87,11 +83,11 @@ function Home() {
       </div>
 
       <div className="w-72 shrink-0">
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <h3 className="font-semibold mb-2">Bitcoin</h3>
-          <p className="text-sm text-gray-500">Chart coming next</p>
-        </div>
-      </div>
+  <div className="card p-4 bg-gradient-to-br from-slate-950 to-blue-950 text-white border-none">
+    <h3 className="font-semibold mb-2">Bitcoin</h3>
+    <p className="text-sm text-gray-300">Chart coming next</p>
+  </div>
+</div>
     </div>
   );
 }

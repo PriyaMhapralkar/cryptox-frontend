@@ -14,6 +14,7 @@ function Wallet() {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [needsPaymentDetails, setNeedsPaymentDetails] = useState(false);
 
   const loadWalletData = async () => {
     try {
@@ -48,11 +49,18 @@ function Wallet() {
   };
 
   const handleAddBalanceViaRazorpay = async (e) => {
-    e.preventDefault();
-    try {
-      const orderRes = await axiosInstance.post("/payment/razorpay/create-order", {
-  amount: parseFloat(addAmount),
-});
+  e.preventDefault();
+  const parsedAmount = parseFloat(addAmount);
+  if (!addAmount || isNaN(parsedAmount) || parsedAmount <= 0) {
+    showResult("Please enter a valid amount greater than zero.", true);
+    return;
+  }
+   try {
+    // ✅ YOU WERE MISSING THIS API CALL
+    const orderRes = await axiosInstance.post("/payment/razorpay/order", {
+      amount: parsedAmount,
+    });
+
 const order =
   typeof orderRes.data === "string"
     ? JSON.parse(orderRes.data)
@@ -93,14 +101,23 @@ const order =
     }
   };
 
-  const handleTransfer = async (e) => {
-    e.preventDefault();
-    try {
-      await axiosInstance.put("/wallet/transfer", {
-        toUserEmail: transferEmail,
-        amount: parseFloat(transferAmount),
-        purpose: "Wallet transfer",
-      });
+ const handleTransfer = async (e) => {
+  e.preventDefault();
+  const parsedAmount = parseFloat(transferAmount);
+  if (!transferAmount || isNaN(parsedAmount) || parsedAmount <= 0) {
+    showResult("Please enter a valid amount greater than zero.", true);
+    return;
+  }
+  if (!transferEmail.trim()) {
+    showResult("Please enter a recipient email.", true);
+    return;
+  }
+   try {
+    // ✅ MISSING API CALL (IMPORTANT)
+    await axiosInstance.post("/transfer", {
+      email: transferEmail,
+      amount: parsedAmount,
+    });
       showResult("Transfer successful!");
       setTransferEmail("");
       setTransferAmount("");
@@ -110,23 +127,43 @@ const order =
     }
   };
 
-  const handleWithdraw = async (e) => {
-    e.preventDefault();
-    try {
-      await axiosInstance.post("/withdrawal", { amount: parseFloat(withdrawAmount) });
-      showResult("Withdrawal requested! Pending admin approval.");
-      setWithdrawAmount("");
-      loadWalletData();
-    } catch (err) {
-  const backendMessage =
-    err.response?.data?.message ||
-    (typeof err.response?.data === "string" ? err.response.data : null) ||
-    err.message ||
-    "Withdrawal request failed.";
+const handleWithdraw = async (e) => {
+  e.preventDefault();
 
-  showResult(backendMessage, true);
-}
-  };
+  setNeedsPaymentDetails(false);
+
+  const parsedAmount = parseFloat(withdrawAmount);
+
+  // ✅ FRONTEND VALIDATION
+  if (!withdrawAmount || isNaN(parsedAmount) || parsedAmount <= 0) {
+    showResult("Please enter a valid amount greater than zero.", true);
+    return;
+  }
+
+  try {
+    await axiosInstance.post("/withdrawal", { amount: parsedAmount });
+
+    showResult("Withdrawal requested! Pending admin approval.");
+    setWithdrawAmount("");
+    loadWalletData();
+
+  } catch (err) {
+    const backendMessage =
+      err.response?.data?.message ||
+      (typeof err.response?.data === "string" ? err.response.data : null) ||
+      err.message ||
+      "Withdrawal request failed.";
+
+    if (
+      backendMessage.toLowerCase().includes("bank") ||
+      backendMessage.toLowerCase().includes("payment")
+    ) {
+      setNeedsPaymentDetails(true);
+    } else {
+      showResult(backendMessage, true);
+    }
+  }
+};
 
   if (loading) return <p className="text-center py-12 text-gray-500">Loading wallet...</p>;
 
@@ -140,6 +177,19 @@ const order =
         <p className="text-gray-500 text-sm">Wallet Balance</p>
         <p className="text-4xl font-bold mt-1">${wallet?.balance?.toLocaleString()}</p>
       </div>
+
+      {needsPaymentDetails && (
+  <div className="text-sm bg-yellow-50 text-yellow-800 px-4 py-3 rounded-md flex items-center justify-between">
+    <span>You need to add your bank details before requesting a withdrawal.</span>
+
+    <Link
+      to="/payment-details"
+      className="ml-4 shrink-0 bg-yellow-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-yellow-700"
+    >
+      Add Payment Details
+    </Link>
+  </div>
+)}
 
       {message && <p className="text-sm text-green-600 bg-green-50 px-4 py-2 rounded-md">{message}</p>}
       {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-md">{error}</p>}
@@ -263,6 +313,7 @@ const order =
               ))}
             </tbody>
           </table>
+
         )}
       </div>
     </div>

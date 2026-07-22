@@ -18,16 +18,28 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
-      const publicPaths = ["/auth", "/coins", "/chat", "/test"];
-      const isPublic = publicPaths.some((p) => error.config?.url?.includes(p));
-      if (!isPublic) {
+
+      const skipAutoLogout = [
+        "/auth",
+        "/coins",
+        "/chat",
+        "/test",
+        "/admin",
+        "/payment-details",
+        "/withdrawal",
+      ];
+
+      const shouldSkip = skipAutoLogout.some((p) =>
+        error.config?.url?.includes(p)
+      );
+
+      if (!shouldSkip) {
         const store = getStore();
-        if (store) {
-          store.dispatch(logout());
-        }
+        if (store) store.dispatch(logout());
         window.location.href = "/login";
       }
     }
+
     return Promise.reject(error);
   }
 );

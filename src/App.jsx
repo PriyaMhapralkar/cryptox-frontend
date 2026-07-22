@@ -13,17 +13,24 @@ import WithdrawHistory from "./pages/WithdrawHistory";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatWidget from "./components/ChatWidget";
+import AdminWithdrawals from "./pages/AdminWithdrawals";
+import ForgotPassword from "./pages/ForgotPassword";
+import { useSelector } from "react-redux";
+import LandingPage from "./pages/LandingPage";
+
 
 
 function App() {
+  const { jwt } = useSelector((state) => state.auth);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+<div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">      <Navbar />
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/" element={jwt ? <Home /> : <LandingPage />} />
         <Route path="/coin/:coinId" element={<CoinDetails />} />
 
         {/* Protected routes */}
@@ -34,6 +41,15 @@ function App() {
         <Route path="/payment-details" element={<ProtectedRoute><PaymentDetails /></ProtectedRoute>} />
         <Route path="/withdraw-history" element={<ProtectedRoute><WithdrawHistory /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route
+  path="/admin/withdrawals"
+  element={
+    <ProtectedRoute>
+      <AdminWithdrawals />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
             <ChatWidget />
 
