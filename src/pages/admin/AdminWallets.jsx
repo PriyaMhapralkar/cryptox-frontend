@@ -38,47 +38,48 @@ function AdminWallets() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Wallet Monitoring</h1>
-        <input
-          type="text"
-          placeholder="Search by user name or email..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(0);
-          }}
-          className="border rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+  <h1 className="text-2xl font-bold text-white">Wallet Monitoring</h1>
+  <input
+    type="text"
+    placeholder="Search by user name or email..."
+    value={search}
+    onChange={(e) => {
+      setSearch(e.target.value);
+      setPage(0);
+    }}
+    className="input-glow w-72"
+  />
+</div>
 
-      <div className="card p-5 mb-6 inline-block">
-        <p className="text-sm text-gray-500">Total System Balance</p>
-        <p className="text-2xl font-bold text-green-600">
-          ${totalBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-        </p>
-      </div>
+<div className="card floating mb-6 inline-block">
+  <p className="text-sm text-gray-400">Total System Balance</p>
+  <p className="text-2xl font-bold text-green-400">
+    ${totalBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+  </p>
+</div>
 
-      <div className="card p-4">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">User</th>
-              <th className="py-2">Email</th>
-              <th className="py-2 text-right">Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pageItems.map((w) => (
-              <tr key={w.id} className="border-b hover:bg-gray-50">
-                <td className="py-3 font-medium">{w.user?.fullName || "—"}</td>
-                <td className="py-3 text-gray-600">{w.user?.email || "—"}</td>
-                <td className="py-3 text-right font-semibold">
-                  ${w.balance?.toLocaleString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+<div className="card">
+  <table className="w-full text-sm table-glass">
+    <thead>
+      <tr>
+        <th className="py-2">User</th>
+        <th className="py-2">Email</th>
+        <th className="py-2 text-right">Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pageItems.map((w) => (
+        <tr key={w.id}>
+          <td className="py-3 font-medium text-white">{w.user?.fullName || "—"}</td>
+          <td className="py-3 text-gray-400">{w.user?.email || "—"}</td>
+          <td className="py-3 text-right font-semibold text-white">
+            ${w.balance?.toLocaleString()}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  
 
         {pageItems.length === 0 && (
           <p className="text-center text-gray-500 py-8">No wallets found.</p>

@@ -19,58 +19,67 @@ function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const [submitting, setSubmitting] = useState(false);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
+  try {
     const result = await dispatch(registerUser(form));
     if (registerUser.fulfilled.match(result)) {
       navigate("/");
     }
-  };
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Create your CryptoX account</h1>
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md card floating">
+        <h1 className="text-2xl font-bold mb-6 text-center text-white">
+          Create your CryptoX account
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">Full Name</label>
             <input
               type="text"
               name="fullName"
               value={form.fullName}
               onChange={handleChange}
               required
-              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-glow"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-glow"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Mobile</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">Mobile</label>
             <input
               type="text"
               name="mobile"
               value={form.mobile}
               onChange={handleChange}
               required
-              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-glow"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">Password</label>
             <input
               type="password"
               name="password"
@@ -78,28 +87,31 @@ function Register() {
               onChange={handleChange}
               required
               minLength={6}
-              className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input-glow"
             />
           </div>
 
           {error && (
-            <p className="text-red-600 text-sm">
+            <p className="text-red-400 text-sm">
               {typeof error === "string" ? error : "Registration failed. Please try again."}
             </p>
           )}
 
           <button
-            type="submit"
-            disabled={status === "loading"}
-            className="w-full bg-blue-600 text-white rounded-md py-2 font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {status === "loading" ? "Creating account..." : "Register"}
-          </button>
+  type="submit"
+  disabled={submitting}
+  className="w-full btn-glow disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+>
+  {submitting && (
+    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+  )}
+  {submitting ? "Creating account..." : "Register"}
+</button>
         </form>
 
-        <p className="text-sm text-center mt-4 text-gray-600">
+        <p className="text-sm text-center mt-4 text-gray-400">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-blue-400 hover:underline">
             Log in
           </Link>
         </p>

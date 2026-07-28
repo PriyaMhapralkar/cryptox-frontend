@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
 const typeStyle = {
-  DEPOSIT: "bg-green-100 text-green-700",
-  WITHDRAWAL: "bg-orange-100 text-orange-700",
-  TRANSFER_IN: "bg-blue-100 text-blue-700",
-  TRANSFER_OUT: "bg-blue-100 text-blue-700",
-  BUY: "bg-purple-100 text-purple-700",
-  SELL: "bg-pink-100 text-pink-700",
+  DEPOSIT: "bg-green-500/15 text-green-400",
+  WITHDRAWAL: "bg-orange-500/15 text-orange-400",
+  TRANSFER_IN: "bg-blue-500/15 text-blue-400",
+  TRANSFER_OUT: "bg-blue-500/15 text-blue-400",
+  BUY: "bg-purple-500/15 text-purple-400",
+  SELL: "bg-pink-500/15 text-pink-400",
 };
 
 function AdminTransactions() {
@@ -48,72 +48,71 @@ function AdminTransactions() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
-        <input
-          type="text"
-          placeholder="Search by user name or email..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(0);
-          }}
-          className="border rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+  <h1 className="text-2xl font-bold text-white">Transactions</h1>
+  <input
+    type="text"
+    placeholder="Search by user name or email..."
+    value={search}
+    onChange={(e) => {
+      setSearch(e.target.value);
+      setPage(0);
+    }}
+    className="input-glow w-72"
+  />
+</div>
 
-      <div className="flex gap-2 mb-4 flex-wrap">
-        {types.map((t) => (
-          <button
-            key={t}
-            onClick={() => {
-              setFilterType(t);
-              setPage(0);
-            }}
-            className={`pill ${filterType === t ? "pill-active" : "pill-inactive"}`}
-          >
-            {t.replace("_", " ")}
-          </button>
-        ))}
-      </div>
+<div className="flex gap-2 mb-4 flex-wrap">
+  {types.map((t) => (
+    <button
+      key={t}
+      onClick={() => {
+        setFilterType(t);
+        setPage(0);
+      }}
+      className={`pill ${filterType === t ? "pill-active" : "pill-inactive"}`}
+    >
+      {t.replace("_", " ")}
+    </button>
+  ))}
+</div>
 
-      <div className="card p-4">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-2">Date</th>
-              <th className="py-2">User</th>
-              <th className="py-2">Type</th>
-              <th className="py-2">Purpose</th>
-              <th className="py-2 text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pageItems.map((t) => (
-              <tr key={t.id} className="border-b hover:bg-gray-50">
-                <td className="py-3 text-gray-600">
-                  {new Date(t.date).toLocaleString()}
-                </td>
-                <td className="py-3">
-                  <p className="font-medium">{t.wallet?.user?.fullName || "—"}</p>
-                  <p className="text-xs text-gray-500">{t.wallet?.user?.email || "—"}</p>
-                </td>
-                <td className="py-3">
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      typeStyle[t.type] || "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {t.type?.replace("_", " ")}
-                  </span>
-                </td>
-                <td className="py-3 text-gray-600">{t.purpose}</td>
-                <td className="py-3 text-right font-medium">
-                  ${t.amount?.toLocaleString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+<div className="card">
+  <table className="w-full text-sm table-glass">
+    <thead>
+      <tr>
+        <th className="py-2">Date</th>
+        <th className="py-2">User</th>
+        <th className="py-2">Type</th>
+        <th className="py-2">Purpose</th>
+        <th className="py-2 text-right">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pageItems.map((t) => (
+        <tr key={t.id}>
+          <td className="py-3 text-gray-400">{new Date(t.date).toLocaleString()}</td>
+          <td className="py-3">
+            <p className="font-medium text-white">{t.wallet?.user?.fullName || "—"}</p>
+            <p className="text-xs text-gray-500">{t.wallet?.user?.email || "—"}</p>
+          </td>
+          <td className="py-3">
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                typeStyle[t.type] || "bg-gray-500/15 text-gray-300"
+              }`}
+            >
+              {t.type?.replace("_", " ")}
+            </span>
+          </td>
+          <td className="py-3 text-gray-400">{t.purpose}</td>
+          <td className="py-3 text-right font-medium text-white">
+            ${t.amount?.toLocaleString()}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
 
         {pageItems.length === 0 && (
           <p className="text-center text-gray-500 py-8">No transactions found.</p>

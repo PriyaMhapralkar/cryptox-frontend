@@ -15,29 +15,28 @@ function WithdrawHistory() {
   }, []);
 
   const statusStyle = {
-    PENDING: "bg-yellow-100 text-yellow-700",
-    SUCCESS: "bg-green-100 text-green-700",
-    DECLINED: "bg-red-100 text-red-700",
+    PENDING: "bg-yellow-500/15 text-yellow-400",
+    SUCCESS: "bg-green-500/15 text-green-400",
+    DECLINED: "bg-red-500/15 text-red-400",
   };
 
-  if (loading) return <p className="text-center py-12 text-gray-500">Loading...</p>;
+  if (loading) return <p className="text-center py-12 text-gray-400">Loading...</p>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-        
-      <h1 className="text-2xl font-bold mb-4">Withdrawal History</h1>
+      <h1 className="text-2xl font-bold mb-4 text-white">Withdrawal History</h1>
 
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+      {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
 
       {withdrawals.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm p-8 text-center text-gray-500">
+        <div className="card text-center text-gray-400 py-8">
           No withdrawal requests yet.
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <table className="w-full text-sm">
+        <div className="card">
+          <table className="w-full text-sm table-glass">
             <thead>
-              <tr className="text-left text-gray-500 border-b">
+              <tr>
                 <th className="py-2">Date</th>
                 <th className="py-2 text-right">Amount</th>
                 <th className="py-2 text-right">Status</th>
@@ -45,11 +44,11 @@ function WithdrawHistory() {
             </thead>
             <tbody>
               {withdrawals.map((w) => (
-                <tr key={w.id} className="border-b">
-                  <td className="py-3 text-gray-600">
+                <tr key={w.id}>
+                  <td className="py-3 text-gray-400">
                     {new Date(w.date).toLocaleString()}
                   </td>
-                  <td className="py-3 text-right font-medium">
+                  <td className="py-3 text-right font-medium text-white">
                     ${w.amount?.toLocaleString()}
                   </td>
                   <td className="py-3 text-right">

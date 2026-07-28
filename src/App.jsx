@@ -49,7 +49,8 @@ function App() {
   }, [jwt]);
 
   return (
-<div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">      <Navbar />
+<div className="min-h-screen">      
+  <Navbar />
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
@@ -94,7 +95,7 @@ function App() {
         </Route>
         
       </Routes>
-            <ChatWidget />
+            {jwt && <ChatWidget />}
 
     </div>
   );

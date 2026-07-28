@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
 const actionStyle = {
-  LOGIN: "bg-blue-100 text-blue-700",
-  REGISTER: "bg-purple-100 text-purple-700",
-  TRANSFER: "bg-cyan-100 text-cyan-700",
-  ADD_BALANCE: "bg-green-100 text-green-700",
-  WITHDRAWAL_REQUEST: "bg-orange-100 text-orange-700",
-  WITHDRAWAL_APPROVED: "bg-green-100 text-green-700",
-  WITHDRAWAL_DECLINED: "bg-red-100 text-red-700",
+  LOGIN: "bg-blue-500/15 text-blue-400",
+  REGISTER: "bg-purple-500/15 text-purple-400",
+  TRANSFER: "bg-cyan-500/15 text-cyan-400",
+  ADD_BALANCE: "bg-green-500/15 text-green-400",
+  WITHDRAWAL_REQUEST: "bg-orange-500/15 text-orange-400",
+  WITHDRAWAL_APPROVED: "bg-green-500/15 text-green-400",
+  WITHDRAWAL_DECLINED: "bg-red-500/15 text-red-400",
 };
 
 function AdminLogs() {
@@ -55,70 +55,70 @@ function AdminLogs() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Activity Logs</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Activity Logs</h1>
 
-      <div className="flex gap-2 mb-4 flex-wrap">
-        {actionTypes.map((a) => (
-          <button
-            key={a}
-            onClick={() => setActionFilter(a)}
-            className={`pill ${actionFilter === a ? "pill-active" : "pill-inactive"}`}
-          >
-            {a.replace(/_/g, " ")}
-          </button>
-        ))}
-      </div>
+<div className="flex gap-2 mb-4 flex-wrap">
+  {actionTypes.map((a) => (
+    <button
+      key={a}
+      onClick={() => setActionFilter(a)}
+      className={`pill ${actionFilter === a ? "pill-active" : "pill-inactive"}`}
+    >
+      {a.replace(/_/g, " ")}
+    </button>
+  ))}
+</div>
 
-      <div className="card p-4">
-        {loading ? (
-          <p className="text-center text-gray-500 py-8">Loading logs...</p>
-        ) : (
-          <>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-500 border-b">
-                  <th className="py-2">User</th>
-                  <th className="py-2">Action</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2">Details</th>
-                  <th className="py-2 text-right">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredLogs.map((log) => (
-                  <tr key={log.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3">
-                      <p className="font-medium">{log.user?.fullName || "System"}</p>
-                      <p className="text-xs text-gray-500">{log.user?.email || "—"}</p>
-                    </td>
-                    <td className="py-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          actionStyle[log.action] || "bg-gray-100 text-gray-700"
-                        }`}
-                      >
-                        {log.action?.replace(/_/g, " ")}
-                      </span>
-                    </td>
-                    <td className="py-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          log.status === "SUCCESS"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {log.status}
-                      </span>
-                    </td>
-                    <td className="py-3 text-gray-600">{log.details}</td>
-                    <td className="py-3 text-right text-gray-500">
-                      {new Date(log.timestamp).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+<div className="card">
+  {loading ? (
+    <p className="text-center text-gray-400 py-8">Loading logs...</p>
+  ) : (
+    <>
+      <table className="w-full text-sm table-glass">
+        <thead>
+          <tr>
+            <th className="py-2">User</th>
+            <th className="py-2">Action</th>
+            <th className="py-2">Status</th>
+            <th className="py-2">Details</th>
+            <th className="py-2 text-right">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredLogs.map((log) => (
+            <tr key={log.id}>
+              <td className="py-3">
+                <p className="font-medium text-white">{log.user?.fullName || "System"}</p>
+                <p className="text-xs text-gray-500">{log.user?.email || "—"}</p>
+              </td>
+              <td className="py-3">
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    actionStyle[log.action] || "bg-gray-500/15 text-gray-300"
+                  }`}
+                >
+                  {log.action?.replace(/_/g, " ")}
+                </span>
+              </td>
+              <td className="py-3">
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    log.status === "SUCCESS"
+                      ? "bg-green-500/15 text-green-400"
+                      : "bg-red-500/15 text-red-400"
+                  }`}
+                >
+                  {log.status}
+                </span>
+              </td>
+              <td className="py-3 text-gray-400">{log.details}</td>
+              <td className="py-3 text-right text-gray-500">
+                {new Date(log.timestamp).toLocaleString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
             {filteredLogs.length === 0 && (
               <p className="text-center text-gray-500 py-8">No activity logs found.</p>

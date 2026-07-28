@@ -32,13 +32,8 @@ function AdminLayout() {
     item.exact ? location.pathname === item.to : location.pathname.startsWith(item.to);
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] bg-gray-50">
-      {/* Sidebar */}
-      <aside
-        className={`${
-          collapsed ? "w-16" : "w-64"
-        } bg-slate-950 text-white transition-all duration-300 flex flex-col`}
-      >
+<div className="flex min-h-[calc(100vh-64px)]">      {/* Sidebar */}
+      <aside className={`${collapsed ? "w-16" : "w-64"} glass rounded-none border-y-0 border-l-0 transition-all duration-300 flex flex-col`}>
         <div className="p-4 flex items-center justify-between border-b border-white/10">
           {!collapsed && <span className="font-bold text-sm tracking-wide">ADMIN PANEL</span>}
           <button
@@ -56,8 +51,8 @@ function AdminLayout() {
               to={item.to}
               className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all relative ${
                 isActive(item)
-                  ? "bg-blue-600/20 text-white border-r-2 border-blue-500"
-                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+  ? "bg-white/10 text-white border-r-2 border-blue-400 shadow-inner"
+  : "text-gray-400 hover:bg-white/10 hover:text-white hover:translate-x-1"
               }`}
             >
               <span className="text-base">{item.icon}</span>
@@ -72,15 +67,14 @@ function AdminLayout() {
         </nav>
 
         {!collapsed && (
-          <div className="p-4 border-t border-white/10 text-xs text-gray-500">
+          <div className="p-4 border-t border-white/10 text-xs text-gray-400">
             CryptoX Admin v1.0
           </div>
         )}
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-6 overflow-x-auto">
-        <Outlet />
+<main className="flex-1 p-6 overflow-x-auto">        <Outlet />
       </main>
     </div>
   );
