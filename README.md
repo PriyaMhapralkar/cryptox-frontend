@@ -1,16 +1,33 @@
-# React + Vite
+# CryptoX — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for the CryptoX crypto trading platform. Built with Vite, Redux Toolkit, Tailwind CSS v4, and Recharts, featuring a dark glassmorphism theme with a gamified landing page.
 
-Currently, two official plugins are available:
+Backend repo: https://github.com/PriyaMhapralkar/cryptox-trading-platform
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- React 19 (Vite)
+- Redux Toolkit + React Redux
+- React Router DOM
+- Tailwind CSS v4 (`@tailwindcss/vite`)
+- Recharts (price charts, admin analytics)
+- Axios
 
-## React Compiler
+## Features
+- Auth flows: login (with 2FA OTP step), register, forgot password
+- Home dashboard: live market table (All/Top 50/Gainers/Losers), pagination, coin search
+- Coin details: price chart (1D/1W/1M), buy/sell trade panel, watchlist, live news + AI-generated price-movement insight
+- Wallet: balance, Razorpay top-up, peer transfer, withdrawal requests
+- Portfolio, watchlist, trading activity, payment details, withdrawal history, profile with 2FA toggle
+- Floating AI chatbot (visible only when logged in)
+- Role-based admin dashboard: overview stats, user management, withdrawal approvals, transactions, wallet monitoring, activity logs
+- Gamified landing page with a live "Bull or Bear" price-prediction mini-game using real BTC data
+- Protected routing with automatic logout on expired/invalid sessions
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Setup
 
-## Expanding the ESLint configuration
+### Prerequisites
+- Node.js 18+
+- The backend running locally on `http://localhost:8080` (see backend README)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Environment Variables
+Create a `.env` file in the project root:

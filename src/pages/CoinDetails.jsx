@@ -26,6 +26,10 @@ function CoinDetails() {
   const [tradeError, setTradeError] = useState("");
   const [watchlistMessage, setWatchlistMessage] = useState("");
 
+  const [news, setNews] = useState([]);
+  const [insight, setInsight] = useState("");
+  const [newsLoading, setNewsLoading] = useState(true);
+
   useEffect(() => {
     axiosInstance.get(`/coins/${coinId}`).then((res) => setCoin(res.data));
   }, [coinId]);
@@ -53,6 +57,25 @@ function CoinDetails() {
       axiosInstance.get("/wallet").then((res) => setWalletBalance(res.data.balance));
     }
   }, [jwt]);
+
+  useEffect(() => {
+    const loadNewsAndInsight = () => {
+      setNewsLoading(true);
+      Promise.all([
+        axiosInstance.get(`/coins/${coinId}/news`),
+        axiosInstance.get(`/coins/${coinId}/insight`),
+      ])
+        .then(([newsRes, insightRes]) => {
+          setNews(newsRes.data);
+          setInsight(insightRes.data.insight);
+        })
+        .finally(() => setNewsLoading(false));
+    };
+
+    loadNewsAndInsight();
+    const interval = setInterval(loadNewsAndInsight, 5 * 60 * 1000); // refresh every 5 min
+    return () => clearInterval(interval);
+  }, [coinId]);
 
   const handleTrade = async (e) => {
     e.preventDefault();
@@ -158,13 +181,7 @@ function CoinDetails() {
                   }}
                   formatter={(value) => `$${value.toLocaleString()}`}
                 />
-                <Line
-                  type="monotone"
-                  dataKey="price"
-                  stroke="#60a5fa"
-                  strokeWidth={2.5}
-                  dot={false}
-                />
+                <Line type="monotone" dataKey="price" stroke="#60a5fa" strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           )}
@@ -187,6 +204,38 @@ function CoinDetails() {
             <span className="text-gray-500">24h Low</span>
             <p className="font-medium text-white">${coin.low24h?.toLocaleString()}</p>
           </div>
+        </div>
+
+        <div className="card mt-4">
+          <h3 className="font-semibold mb-3 text-white">Why is {coin.symbol.toUpperCase()} moving?</h3>
+          {newsLoading ? (
+            <p className="text-sm text-gray-400">Analyzing recent data...</p>
+          ) : (
+            <p className="text-sm text-gray-300 leading-relaxed">{insight}</p>
+          )}
+        </div>
+
+        <div className="card mt-4">
+          <h3 className="font-semibold mb-3 text-white">Latest News</h3>
+          {newsLoading ? (
+            <p className="text-sm text-gray-400">Loading news...</p>
+          ) : news.length === 0 ? (
+            <p className="text-sm text-gray-400">No recent news found for this coin.</p>
+          ) : (
+            <div className="space-y-3">
+              {news.map((item, i) => {
+                return (
+                  <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
+                    <p className="text-sm text-gray-100 font-medium mb-1">{item.title}</p>
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span>{item.source}</span>
+                      <span>{new Date(item.publishedAt).toLocaleDateString()}</span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
