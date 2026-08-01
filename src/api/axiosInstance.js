@@ -3,7 +3,7 @@ import { getStore } from "../redux/storeRegistry";
 import { logout } from "../redux/auth/authSlice";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
 });
 
 axiosInstance.interceptors.request.use((config) => {

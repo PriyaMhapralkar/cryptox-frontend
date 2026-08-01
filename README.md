@@ -11,7 +11,7 @@ Backend repo: https://github.com/PriyaMhapralkar/cryptox-trading-platform
 - Tailwind CSS v4 (`@tailwindcss/vite`)
 - Recharts (price charts, admin analytics)
 - Axios
-
+                                                                                    
 ## Features
 - Auth flows: login (with 2FA OTP step), register, forgot password
 - Home dashboard: live market table (All/Top 50/Gainers/Losers), pagination, coin search
