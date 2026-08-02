@@ -61,9 +61,17 @@ function ChatWidget() {
       </button>
 
       {open && (
-        <div className="fixed bottom-24 right-6 w-80 h-96 flex flex-col z-50">
+        <div
+          className="fixed bottom-24 right-6 w-80 h-96 flex flex-col z-50 rounded-2xl overflow-hidden"
+          style={{
+            background: "rgba(10, 14, 30, 0.97)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
+          }}
+        >
           <div
-            className="px-4 py-3 rounded-t-2xl"
+            className="px-4 py-3"
             style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3))" }}
           >
             <h3 className="font-semibold text-sm text-white">CryptoX Assistant</h3>
